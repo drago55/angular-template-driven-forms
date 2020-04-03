@@ -1,0 +1,75 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+  <div class="container-fluid">
+    <h1 class="text-center">Bootcamp Enrollment Form</h1>
+    <div class="alert alert-danger" *ngIf="errorMsg">
+      {{errorMsg}}
+    </div>
+    <form #userForm="ngForm" *ngIf="!submitted" (ngSubmit)="onSubmit()" novalidate>
+     
+      <div class="row justify-content-md-center"> 
+        <div class="col-5">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" #name="ngModel" required [class.is-invalid]="name.invalid && name.touched" class="form-control" name="userName" [(ngModel)]="userModel.name" placeholder="Enter your name">
+            <small class="text-danger" [class.d-none]="name.valid || name.untouched">Name is required.</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="mail">Email</label>
+            <input type="text" class="form-control" [(ngModel)]="userModel.email" name="email" placeholder="Enter your email">
+          </div>        
+     
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" class="form-control" required #phone="ngModel" pattern="^\d{10}$"  [class.is-invalid]="phone.invalid && phone.touched" [(ngModel)]="userModel.phone" name="phone" placeholder="Enter your phone">
+            <small class="text-danger" [class.d-none]="phone.valid || phone.untouched">Phone number is required and must be 10 digits</small>
+            <div *ngIf="phone.errors && (phone.invalid || phone.touched)">
+              <small class="text-danger" *ngIf="phone.errors.required">Phone number is required!</small>
+              <small class="text-danger" *ngIf="phone.errors.pattern">Phone number must be 10 digits</small>
+            </div>
+          </div>
+    
+          <div class="form-group">
+            <label for="name">Select topic</label>
+            <select (blure)="validateTopic(topic,value)" (change)="validateTopic(topic.value)" class="custom-select"  #topic="ngModel" [class.is-invalid]="topic.invalid && topic.touched" [(ngModel)]="userModel.topic" name="topic">
+                <option value="" selected="">I am interested in</option>
+                <option *ngFor="let topic of topics">{{ topic }}</option>
+            </select>
+            <small class="text-danger" [class.d-none]="!topicHasError || topic.untouched" >Please choose a topic</small>
+          </div>
+       
+        </div>
+      </div>
+      <div class="row justify-content-md-left"> 
+        <div class="col-3">
+
+        
+        <label for="timePreferanec">Time preference</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="timePreferance" [(ngModel)]="userModel.timePreferance" value="morning">
+            <label class="form-check-label">
+              Morning (9AM - 12 PM)
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="timePreferance" [(ngModel)]="userModel.timePreferance" value="evening">
+            <label class="form-check-label">
+              Evening (5PM - 8 PM)
+            </label>
+          </div>
+        </div>
+       </div>     
+        <div class="form-check mb-3"> 
+            <input class="form-check-input" name="subscribe" [(ngModel)]="userModel.subscribe" type="checkbox">
+            <label class="form-check-label"> 
+              Send me promotional offers
+            </label>
+        </div>
+
+        <button class="btn btn-primary" [disabled] ="userForm.form.invalid" type="submit">Submit form</button>
+
+    </form>
+    
+  </div>
+  
